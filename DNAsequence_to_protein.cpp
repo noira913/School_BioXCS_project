@@ -7,7 +7,7 @@
 
 
 // DNA to RNA conversion
-string dnaToRna(const std::string& dna) {
+std::string dnaToRna(const std::string& dna) {
     std::string rna = dna;
     for (char& nucleotide : rna) {
         if (nucleotide == 'T') nucleotide = 'U';
@@ -16,7 +16,7 @@ string dnaToRna(const std::string& dna) {
 }
 
 // Map codons to amino acids
-unordered_map<std::string, std::string> getCodonTable() {
+std::unordered_map<std::string, std::string> getCodonTable() {
     return {
         {"AUG", "Methionine"}, {"UUU", "Phenylalanine"}, {"UUC", "Phenylalanine"},
         {"UUA", "Leucine"},    {"UUG", "Leucine"},       {"UCU", "Serine"},
@@ -60,13 +60,13 @@ std::string identifyProtein(const std::vector<std::string>& aminoAcids) {
     // Simulated hexokinase sequence
     std::vector<std::string> catalase = {"Methionine", "Phenylalanine", "Leucine", "Serine"};
     if (aminoAcids.size() >= catalase.size() &&
-        equal(catalase.begin(), catalse.end(), catalase.begin())) {
+        equal(catalase.begin(), catalase.end(), catalase.begin())) {
         return "catalase (Homo Sapiens)";
     }
     return "Unknown Protein";
 }
 
-string cleanSequence(const string& sequence) {
+std::string cleanSequence(const std::string& sequence) {
     std::string cleaned;
     for (char c : sequence) {
         if (isalpha(c)) {
@@ -97,27 +97,27 @@ int main() {
 
     // Convert DNA to RNA
     std::string rnaSequence = dnaToRna(dnaSequence);
-    cout << "RNA Sequence: " << rnaSequence << endl;
+    std::cout << "RNA Sequence: " << rnaSequence << std::endl;
 
     // Convert RNA to codons
     std::vector<std::string> codons = rnaToCodons(rnaSequence);
-    cout << "Codons: ";
-    for (const string& codon : codons) {
-        cout << codon << " ";
+    std::cout << "Codons: ";
+    for (const std::string& codon : codons) {
+        std::cout << codon << " ";
     }
-    cout << endl;
+    std::cout << std::endl;
 
     // Translate codons to amino acids
-    vector<string> aminoAcids = codonsToAminoAcids(codons);
-    cout << "Amino Acids: ";
-    for (const string& aminoAcid : aminoAcids) {
-        cout << aminoAcid << " ";
+    std::vector<std::string> aminoAcids = codonsToAminoAcids(codons);
+    std::cout << "Amino Acids: ";
+    for (const std::string& aminoAcid : aminoAcids) {
+        std::cout << aminoAcid << " ";
     }
-    cout << endl;
+    std::cout << std::endl;
 
     // Identify protein
-    string protein = identifyProtein(aminoAcids);
-    cout << "Protein: " << protein << endl;
+    std::string protein = identifyProtein(aminoAcids);
+    std::cout << "Protein: " << protein << std::endl;
 
     return 0;
 }
