@@ -17,30 +17,29 @@ std::string dnaToRna(const std::string& dna) {
 }
 
 // Map codons to amino acids
-std::unordered_map<std::string, std::string> getCodonTable() {
+std::unordered_map<std::string, char> getCodonTable() {
     return {
-        {"AUG", "M"}, {"UUG", "L"}, {"GUG", "V"},
+        {"AUG", 'M'}, {"UUG", 'L'}, {"GUG", 'V'},
 
-        {"UUU", "F"}, {"UUC", "F"}, {"UUA", "L"},  
-        {"UCU", "S"}, {"UCC", "S"}, {"UCA", "S"}, {"UCG", "S"},
-        {"UAU", "Y"}, {"UAC", "Y"}, 
-        {"UGU", "C"}, {"UGC", "C"}, {"UGG", "W"}, 
-        {"CUU", "L"}, {"CUC", "L"}, {"CUA", "L"}, {"CUG", "L"},
-        {"CCU", "P"}, {"CCC", "P"}, {"CCA", "P"}, {"CCG", "P"},
-        {"CAU", "H"}, {"CAC", "H"}, {"CAA", "Q"}, {"CAG", "Q"},
-        {"CGU", "R"}, {"CGC", "R"}, {"CGA", "R"}, {"CGG", "R"},
-        {"AUU", "I"}, {"AUC", "I"}, {"AUA", "I"},
-        {"ACU", "T"}, {"ACC", "T"}, {"ACA", "T"}, {"ACG", "T"},
-        {"AAU", "N"}, {"AAC", "N"}, {"AAA", "K"}, {"AAG", "K"},
-        {"AGU", "S"}, {"AGC", "S"}, {"AGA", "R"}, {"AGG", "R"},
-        {"GUU", "V"}, {"GUC", "V"}, {"GUA", "V"},
-        {"GCU", "A"}, {"GCC", "A"}, {"GCA", "A"}, {"GCG", "A"},
-        {"GAU", "D"}, {"GAC", "D"}, {"GAA", "E"}, {"GAG", "E"},
-        {"GGU", "G"}, {"GGC", "G"}, {"GGA", "G"}, {"GGG", "G"},
+        {"UUU", 'F'}, {"UUC", 'F'}, {"UUA", 'L'},  
+        {"UCU", 'S'}, {"UCC", 'S'}, {"UCA", 'S'}, {"UCG", 'S'},
+        {"UAU", 'Y'}, {"UAC", 'Y'}, 
+        {"UGU", 'C'}, {"UGC", 'C'}, {"UGG", 'W'}, 
+        {"CUU", 'L'}, {"CUC", 'L'}, {"CUA", 'L'}, {"CUG", 'L'},
+        {"CCU", 'P'}, {"CCC", 'P'}, {"CCA", 'P'}, {"CCG", 'P'},
+        {"CAU", 'H'}, {"CAC", 'H'}, {"CAA", 'Q'}, {"CAG", 'Q'},
+        {"CGU", 'R'}, {"CGC", 'R'}, {"CGA", 'R'}, {"CGG", 'R'},
+        {"AUU", 'I'}, {"AUC", 'I'}, {"AUA", 'I'},
+        {"ACU", 'T'}, {"ACC", 'T'}, {"ACA", 'T'}, {"ACG", 'T'},
+        {"AAU", 'N'}, {"AAC", 'N'}, {"AAA", 'K'}, {"AAG", 'K'},
+        {"AGU", 'S'}, {"AGC", 'S'}, {"AGA", 'R'}, {"AGG", 'R'},
+        {"GUU", 'V'}, {"GUC", 'V'}, {"GUA", 'V'},
+        {"GCU", 'A'}, {"GCC", 'A'}, {"GCA", 'A'}, {"GCG", 'A'},
+        {"GAU", 'D'}, {"GAC", 'D'}, {"GAA", 'E'}, {"GAG", 'E'},
+        {"GGU", 'G'}, {"GGC", 'G'}, {"GGA", 'G'}, {"GGG", 'G'},
 
-        {"UAA", "STOP"}, {"UAG", "STOP"}, {"UGA", "STOP"},
+        {"UAA", 'STOP'}, {"UAG", 'STOP'}, {"UGA", 'STOP'},
         
-        // Add more codons as needed
     };
 }
 
@@ -56,41 +55,46 @@ std::vector<std::string> rnaToCodons(const std::string& rna) {
 }
 
 // Translate codons to amino acids
-std::vector<std::string> codonsToAminoAcids(const std::vector<std::string>& codons) {
-    std::vector<std::string> aminoAcids;
+std::vector<char> codonsToAminoAcids(const std::vector<std::string>& codons) {
+    std::vector<char> aminoAcids;
     auto codonTable = getCodonTable();
     for (const std::string& codon : codons) {
         if (codonTable.find(codon) != codonTable.end()) {
-            std::string aminoAcid = codonTable[codon];
-            if (aminoAcid == "STOP") break; // Stop translation at stop codon
+            char aminoAcid = codonTable[codon];
+            if (aminoAcid == 'STOP') break; // Stop translation at stop codon
             aminoAcids.push_back(aminoAcid);
         } else {
-            aminoAcids.push_back("Unknown");
+            aminoAcids.push_back('NULL');
         }
     }
     return aminoAcids;
 }
 
 // Simulate protein identification
-std::string identifyProtein(const std::vector<std::string>& aminoAcids) {
-    // Simulated hexokinase sequence
+std::string identifyProtein(const std::vector<char>& aminoAcids) {
 
-    std::ifstream controlFile("human_catalase_dna_sequence-control.txt");
+    std::ifstream controlFile("human_catalase_amino_acid_sequence-control.txt");
 
     std::string line, amino_acid_sequence;
     while (getline(controlFile, line)) {
         std::stringstream ss(line);
         std::string segment;
         while (ss >> segment) {
-            amino_acid_sequence += cleanSequence(segment);
+            amino_acid_sequence += segment;
         }
     }
     controlFile.close();
 
 
+    std::vector<char> catalase;
 
-    std::vector<std::string> catalase = {"Methionine", "Phenylalanine", "Leucine", "Serine"};
-    if (aminoAcids.size() == catalase.size() && equal(catalase.begin(), catalase.end(), catalase.begin())) {
+    for (char ch : amino_acid_sequence) {
+        if (ch != ' ' && ch != '\0') {
+            catalase.push_back(ch);
+        }
+    }
+
+    if (aminoAcids.size() == catalase.size() && equal(catalase.begin(), catalase.end(), aminoAcids.begin())) {
         return "catalase (Homo Sapiens)";
     }
     else {
@@ -129,7 +133,7 @@ int main() {
 
     // Convert DNA to RNA
     std::string rnaSequence = dnaToRna(dnaSequence);
-    std::cout << "RNA Sequence: " << rnaSequence << std::endl;
+    std::cout << "RNA Sequence: " << rnaSequence << '\n' << std::endl;
 
     // Convert RNA to codons
     std::vector<std::string> codons = rnaToCodons(rnaSequence);
@@ -137,15 +141,15 @@ int main() {
     for (const std::string& codon : codons) {
         std::cout << codon << " ";
     }
-    std::cout << std::endl;
+    std::cout << '\n' << std::endl;
 
     // Translate codons to amino acids
-    std::vector<std::string> aminoAcids = codonsToAminoAcids(codons);
+    std::vector<char> aminoAcids = codonsToAminoAcids(codons);
     std::cout << "Amino Acids: ";
-    for (const std::string& aminoAcid : aminoAcids) {
-        std::cout << aminoAcid << " ";
+    for (const char& aminoAcid : aminoAcids) {
+        std::cout << aminoAcid;
     }
-    std::cout << std::endl;
+    std::cout <<  '\n' <<std::endl;
 
     // Identify protein
     std::string protein = identifyProtein(aminoAcids);
