@@ -6,6 +6,7 @@
 #include <cctype>
 
 
+
 // DNA to RNA conversion
 std::string dnaToRna(const std::string& dna) {
     std::string rna = dna;
@@ -18,12 +19,27 @@ std::string dnaToRna(const std::string& dna) {
 // Map codons to amino acids
 std::unordered_map<std::string, std::string> getCodonTable() {
     return {
-        {"AUG", "Methionine"}, {"UUU", "Phenylalanine"}, {"UUC", "Phenylalanine"},
-        {"UUA", "Leucine"},    {"UUG", "Leucine"},       {"UCU", "Serine"},
-        {"UCC", "Serine"},     {"UCA", "Serine"},        {"UCG", "Serine"},
-        {"UAU", "Tyrosine"},   {"UAC", "Tyrosine"},      {"UGU", "Cysteine"},
-        {"UGC", "Cysteine"},   {"UGG", "Tryptophan"},    {"UAA", "STOP"},
-        {"UAG", "STOP"},       {"UGA", "STOP"}
+        {"AUG", "M"}, {"UUG", "L"}, {"GUG", "V"},
+
+        {"UUU", "F"}, {"UUC", "F"}, {"UUA", "L"},  
+        {"UCU", "S"}, {"UCC", "S"}, {"UCA", "S"}, {"UCG", "S"},
+        {"UAU", "Y"}, {"UAC", "Y"}, 
+        {"UGU", "C"}, {"UGC", "C"}, {"UGG", "W"}, 
+        {"CUU", "L"}, {"CUC", "L"}, {"CUA", "L"}, {"CUG", "L"},
+        {"CCU", "P"}, {"CCC", "P"}, {"CCA", "P"}, {"CCG", "P"},
+        {"CAU", "H"}, {"CAC", "H"}, {"CAA", "Q"}, {"CAG", "Q"},
+        {"CGU", "R"}, {"CGC", "R"}, {"CGA", "R"}, {"CGG", "R"},
+        {"AUU", "I"}, {"AUC", "I"}, {"AUA", "I"},
+        {"ACU", "T"}, {"ACC", "T"}, {"ACA", "T"}, {"ACG", "T"},
+        {"AAU", "N"}, {"AAC", "N"}, {"AAA", "K"}, {"AAG", "K"},
+        {"AGU", "S"}, {"AGC", "S"}, {"AGA", "R"}, {"AGG", "R"},
+        {"GUU", "V"}, {"GUC", "V"}, {"GUA", "V"},
+        {"GCU", "A"}, {"GCC", "A"}, {"GCA", "A"}, {"GCG", "A"},
+        {"GAU", "D"}, {"GAC", "D"}, {"GAA", "E"}, {"GAG", "E"},
+        {"GGU", "G"}, {"GGC", "G"}, {"GGA", "G"}, {"GGG", "G"},
+
+        {"UAA", "STOP"}, {"UAG", "STOP"}, {"UGA", "STOP"},
+        
         // Add more codons as needed
     };
 }
@@ -58,12 +74,28 @@ std::vector<std::string> codonsToAminoAcids(const std::vector<std::string>& codo
 // Simulate protein identification
 std::string identifyProtein(const std::vector<std::string>& aminoAcids) {
     // Simulated hexokinase sequence
+
+    std::ifstream controlFile("human_catalase_dna_sequence-control.txt");
+
+    std::string line, amino_acid_sequence;
+    while (getline(controlFile, line)) {
+        std::stringstream ss(line);
+        std::string segment;
+        while (ss >> segment) {
+            amino_acid_sequence += cleanSequence(segment);
+        }
+    }
+    controlFile.close();
+
+
+
     std::vector<std::string> catalase = {"Methionine", "Phenylalanine", "Leucine", "Serine"};
-    if (aminoAcids.size() >= catalase.size() &&
-        equal(catalase.begin(), catalase.end(), catalase.begin())) {
+    if (aminoAcids.size() == catalase.size() && equal(catalase.begin(), catalase.end(), catalase.begin())) {
         return "catalase (Homo Sapiens)";
     }
-    return "Unknown Protein";
+    else {
+        return "Unknown Protein";
+    }
 }
 
 std::string cleanSequence(const std::string& sequence) {
