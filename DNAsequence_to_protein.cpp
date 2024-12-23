@@ -4,9 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <cctype>
-
-
-
+#include <CppSQLite3.h>
 
 // DNA to RNA conversion
 std::string dnaToRna(const std::string& dna) {
